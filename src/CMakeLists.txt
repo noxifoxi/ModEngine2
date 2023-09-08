@@ -84,7 +84,8 @@ target_include_directories(modengine2 PRIVATE
         "../third-party/imgui/backends"
         "../third-party/MINT"
         "../third-party/ImTerm/include"
-        "../third-party/sol2_ImGui_Bindings")
+        "../third-party/sol2_ImGui_Bindings"
+        "../third-party/mem/include")
 
 target_link_libraries(modengine2 PRIVATE
         ${DETOURS_LIBRARY}

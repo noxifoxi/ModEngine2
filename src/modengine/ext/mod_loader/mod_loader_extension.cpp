@@ -16,8 +16,8 @@ auto loose_params_aob_1 = util::hex_string("74 68 48 8B CF 48 89 5C 24 30 E8");
 auto loose_params_aob_2 = util::hex_string("0F 85 C5 00 00 00 48 8D 4C 24 28");
 //auto loose_params_aob_3 = util::hex_string("E8 C8 F7 F7 FF 90 E9 73 E3 1F 04");
 
-auto virtual_to_archive_path_er_aob = util::hex_aob("e8 ?? ?? ?? ?? 48 83 7b 20 08 48 8d 4b 08 72 03 48 8b 09 4c 8b 4b 18 41 b8 05 00 00 00 4d 3b c8");
-auto virtual_to_archive_path_ac6_aob = util::hex_aob("cf e8 ?? ?? ?? ?? 48 83 7b 20 08 48 8d 4b 08 72 03 48 8b 09 4c 8b 4b 18 41 b8 05 00 00 00 4d 3b c8");
+auto virtual_to_archive_path_er_aob = ScanPattern("E8 ? ? ? ? 48 83 7B 20 08 48 8D 4B 08 72 03 48 8B 09 4C 8B 4B 18 41 B8 05 00 00 00 4D 3B C8");
+auto virtual_to_archive_path_ac6_aob = ScanPattern("CF E8 ? ? ? ? 48 83 7B 20 08 48 8D 4B 08 72 03 48 8B 09 4C 8B 4B 18 41 B8 05 00 00 00 4D 3B C8");
 
 auto ak_file_location_resolver_open_aob = util::hex_aob("4c 89 74 24 28 48 8b 84 24 90 00 00 00 48 89 44 24 20 4c 8b ce 45 8b c4 49 8b d7 48 8b cd e8 ?? ?? ?? ?? 8b d8");
 

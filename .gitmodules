@@ -17,3 +17,6 @@
 [submodule "third-party/MINT"]
 	path = third-party/MINT
 	url = https://github.com/Chuyu-Team/MINT.git
+[submodule "third-party/mem"]
+	path = third-party/mem
+	url = https://github.com/0x1F9F1/mem.git

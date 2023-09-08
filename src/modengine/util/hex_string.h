@@ -11,6 +11,5 @@
 namespace modengine::util {
 
 std::string hex_string(const char* input);
-ScanPattern hex_aob(const char* input);
 
 }
