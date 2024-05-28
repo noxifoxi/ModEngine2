@@ -64,6 +64,13 @@ int WINAPI modengine_entrypoint(void)
      * Steam checks the signature of this */
     entry_hook_set.unhook_all();
 
+#if ELDEN_LOADER_MODE
+    const auto settings_path_env = std::getenv("MODENGINE_CONFIG");
+    if (settings_path_env == nullptr) {
+       _putenv_s("MODENGINE_CONFIG", (game_path / "modengine.toml").string().c_str());
+    }
+#endif
+
     SettingsLoader settings_loader(modengine_path, game_path);
     Settings settings;
 
@@ -109,17 +116,48 @@ int WINAPI modengine_entrypoint(void)
         error("Failed to attach modengine: {}", e.what());
     }
 
+#if !ELDEN_LOADER_MODE
     return hooked_entrypoint.original();
+#else
+    return 0;
+#endif
 }
 
 static bool attach(HMODULE module)
 {
     modengine_instance = module;
-    
+    wchar_t dll_filename[MAX_PATH];
+
+    // Grab the path to the modengine2.dll file, so we can locate the global
+    // configuration from here if it exists.
+    if (!GetModuleFileNameW(module, dll_filename, MAX_PATH)) {
+        return false;
+    }
+
+    modengine_path = fs::path(dll_filename).parent_path();
+    if (modengine_path.filename() == "bin") {
+        modengine_path = modengine_path.parent_path();
+    }
+
+    wchar_t game_filename[MAX_PATH];
+
+    // Also get the path to the game executable, to support legacy use-cases of putting
+    // mods in the game folder.
+    if (!GetModuleFileNameW(nullptr, game_filename, MAX_PATH)) {
+        return false;
+    }
+
+    game_path = fs::path(game_filename).parent_path();
+
+#if !ELDEN_LOADER_MODE
     hooked_entrypoint.original = reinterpret_cast<fnEntry>(DetourGetEntryPoint(nullptr));
     hooked_entrypoint.replacement = modengine_entrypoint;
     entry_hook_set.install(reinterpret_cast<Hook<modengine::GenericFunctionPointer>*>(&hooked_entrypoint));
     entry_hook_set.hook_all();
+#else
+    // Chain with Elden Mod Loader
+    modengine_entrypoint();
+#endif
 
     return true;
 }

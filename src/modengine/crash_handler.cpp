@@ -16,11 +16,18 @@ std::unique_ptr<crashpad::CrashReportDatabase> database;
 
 void start_crash_report_uploads()
 {
+#if ELDEN_LOADER_MODE
+    return;
+#endif
     database->GetSettings()->SetUploadsEnabled(true);
 }
 
 void start_crash_handler(const fs::path &install_root, const fs::path &data_root)
 {
+#if ELDEN_LOADER_MODE
+    return;
+#endif
+
     const auto crashpad_path = install_root / "crashpad";
     const auto crashdump_path = data_root / "crashdumps";
 
